@@ -57,6 +57,8 @@ svcacct: gitman@test-ground.iam.gserviceaccount.com
 
 The playbook does reboot hosts by default.  
 
+Included within Repo is a python script that parses required instance information and details into a csv that is uploaded into bigquery and presented with Google Looker Studio.
+
 
 - to make work with gcp.yml file as inventory - specify projects and will detect all and run  
 - using gcp.yml enables ansible to grab GCP related info on instances and can be pulled into a yaml file  
