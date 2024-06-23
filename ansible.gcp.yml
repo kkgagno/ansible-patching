@@ -1,0 +1,7 @@
+plugin: gcp_compute
+projects:
+  - test-ground-403314
+  - customer-403819
+auth_kind: serviceaccount
+service_account_file: /workspace/ansible/sc.json
+#service_account_file: $HOME/ansible/sc.json

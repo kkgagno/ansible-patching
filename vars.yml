@@ -1,0 +1,8 @@
+---
+#Project containing secrets
+gcpproject: test-ground-403314
+#secret name for private key used for ssh
+sshcred: sshcred
+#secret name for Service Account JSON
+scjson: gitmanjson
+svcacct: gitman@test-ground-403314.iam.gserviceaccount.com

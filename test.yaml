@@ -1,0 +1,4 @@
+---
+- import_playbook: login.yaml
+- import_playbook: checkupdate.yaml
+#- import_playbook: C-enable-watchdog.yml

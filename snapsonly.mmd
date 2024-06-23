@@ -1,0 +1,173 @@
+---
+title: Ansible Playbook Grapher
+---
+%%{ init: { "flowchart": { "curve": "bumpX" } } }%%
+flowchart LR
+	%% Start of the playbook 'snapsonly.yaml'
+	playbook_45d6aaf8("snapsonly.yaml")
+		%% Start of the play 'Play: all (0)'
+		play_9488c061["Play: all (0)"]
+		style play_9488c061 fill:#3c9065,color:#ffffff
+		playbook_45d6aaf8 --> |"1"| play_9488c061
+		linkStyle 0 stroke:#3c9065,color:#3c9065
+			%% Start of the role 'login'
+			play_9488c061 --> |"1"| role_dfb75dc2
+			linkStyle 1 stroke:#3c9065,color:#3c9065
+			role_dfb75dc2("[role] login")
+			style role_dfb75dc2 fill:#3c9065,color:#ffffff,stroke:#3c9065
+				task_08c9b942[" login : Import vars"]
+				style task_08c9b942 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"1 [when: ( 'localhost' in inventory_hostname )]"| task_08c9b942
+				linkStyle 2 stroke:#3c9065,color:#3c9065
+				task_be0be0a5[" login : Remove SSH keypair"]
+				style task_be0be0a5 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"2 [when: ( 'localhost' in inventory_hostname )]"| task_be0be0a5
+				linkStyle 3 stroke:#3c9065,color:#3c9065
+				task_55261d86[" login : Remove SC json"]
+				style task_55261d86 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"3 [when: ( 'localhost' in inventory_hostname )]"| task_55261d86
+				linkStyle 4 stroke:#3c9065,color:#3c9065
+				task_cb9a35d9[" login : Get project name"]
+				style task_cb9a35d9 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"4 [when: ( 'localhost' in inventory_hostname )]"| task_cb9a35d9
+				linkStyle 5 stroke:#3c9065,color:#3c9065
+				task_ae648103[" login : debug"]
+				style task_ae648103 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"5 [when: ( 'localhost' in inventory_hostname )]"| task_ae648103
+				linkStyle 6 stroke:#3c9065,color:#3c9065
+				task_dcede82e[" login : set_fact"]
+				style task_dcede82e stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"6 [when: ( 'localhost' in inventory_hostname )]"| task_dcede82e
+				linkStyle 7 stroke:#3c9065,color:#3c9065
+				task_dca13910[" login : get private key"]
+				style task_dca13910 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"7 [when: ( 'localhost' in inventory_hostname )]"| task_dca13910
+				linkStyle 8 stroke:#3c9065,color:#3c9065
+				task_5f68ebf2[" login : debug"]
+				style task_5f68ebf2 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"8 [when: ( 'localhost' in inventory_hostname )]"| task_5f68ebf2
+				linkStyle 9 stroke:#3c9065,color:#3c9065
+				task_3368b694[" login : get sc json key"]
+				style task_3368b694 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"9 [when: ( 'localhost' in inventory_hostname )]"| task_3368b694
+				linkStyle 10 stroke:#3c9065,color:#3c9065
+				task_6c2dd0af[" login : debug"]
+				style task_6c2dd0af stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"10 [when: ( 'localhost' in inventory_hostname )]"| task_6c2dd0af
+				linkStyle 11 stroke:#3c9065,color:#3c9065
+				task_409dc587[" login : Change file permissions"]
+				style task_409dc587 stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"11 [when: ( 'localhost' in inventory_hostname )]"| task_409dc587
+				linkStyle 12 stroke:#3c9065,color:#3c9065
+				task_2d4e7e8c[" login : Change file permissions"]
+				style task_2d4e7e8c stroke:#3c9065,fill:#ffffff
+				role_dfb75dc2 --> |"12 [when: ( 'localhost' in inventory_hostname )]"| task_2d4e7e8c
+				linkStyle 13 stroke:#3c9065,color:#3c9065
+			%% End of the role 'login'
+		%% End of the play 'Play: all (0)'
+		%% Start of the play 'Play: all (0)'
+		play_ac05d4af["Play: all (0)"]
+		style play_ac05d4af fill:#01cb42,color:#ffffff
+		playbook_45d6aaf8 --> |"2"| play_ac05d4af
+		linkStyle 14 stroke:#01cb42,color:#01cb42
+			%% Start of the role 'snapcreate'
+			play_ac05d4af --> |"1"| role_22727695
+			linkStyle 15 stroke:#01cb42,color:#01cb42
+			role_22727695("[role] snapcreate")
+			style role_22727695 fill:#01cb42,color:#ffffff,stroke:#01cb42
+				task_4b7b6625[" snapcreate : Import vars"]
+				style task_4b7b6625 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"1 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' )]"| task_4b7b6625
+				linkStyle 16 stroke:#01cb42,color:#01cb42
+				task_41d8d356[" snapcreate : Get project name"]
+				style task_41d8d356 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"2 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' )]"| task_41d8d356
+				linkStyle 17 stroke:#01cb42,color:#01cb42
+				task_4ccd16ea[" snapcreate : debug"]
+				style task_4ccd16ea stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"3 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' )]"| task_4ccd16ea
+				linkStyle 18 stroke:#01cb42,color:#01cb42
+				task_212cc913[" snapcreate : set_fact"]
+				style task_212cc913 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"4 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' )]"| task_212cc913
+				linkStyle 19 stroke:#01cb42,color:#01cb42
+				task_40981bc2[" snapcreate : activate sc"]
+				style task_40981bc2 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"5 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' )]"| task_40981bc2
+				linkStyle 20 stroke:#01cb42,color:#01cb42
+				task_71dd9ce6[" snapcreate : Get zone name"]
+				style task_71dd9ce6 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"6 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_71dd9ce6
+				linkStyle 21 stroke:#01cb42,color:#01cb42
+				task_9cef7c3e[" snapcreate : set_fact"]
+				style task_9cef7c3e stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"7 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_9cef7c3e
+				linkStyle 22 stroke:#01cb42,color:#01cb42
+				task_7f0ea683[" snapcreate : debug"]
+				style task_7f0ea683 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"8 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_7f0ea683
+				linkStyle 23 stroke:#01cb42,color:#01cb42
+				task_3d9978fc[" snapcreate : Get disk name"]
+				style task_3d9978fc stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"9 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_3d9978fc
+				linkStyle 24 stroke:#01cb42,color:#01cb42
+				task_48be1dc9[" snapcreate : set_fact"]
+				style task_48be1dc9 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"10 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_48be1dc9
+				linkStyle 25 stroke:#01cb42,color:#01cb42
+				task_661766c4[" snapcreate : debug"]
+				style task_661766c4 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"11 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_661766c4
+				linkStyle 26 stroke:#01cb42,color:#01cb42
+				task_ef8cf4e1[" snapcreate : ansible date and time"]
+				style task_ef8cf4e1 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"12 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' )]"| task_ef8cf4e1
+				linkStyle 27 stroke:#01cb42,color:#01cb42
+				task_a423cfc9[" snapcreate : create epoch var"]
+				style task_a423cfc9 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"13 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' )]"| task_a423cfc9
+				linkStyle 28 stroke:#01cb42,color:#01cb42
+				task_a2c2a445[" snapcreate : Create snapshot"]
+				style task_a2c2a445 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"14 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_a2c2a445
+				linkStyle 29 stroke:#01cb42,color:#01cb42
+				task_15ac8a3f[" snapcreate : set_fact"]
+				style task_15ac8a3f stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"15 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_15ac8a3f
+				linkStyle 30 stroke:#01cb42,color:#01cb42
+				task_2a1be8de[" snapcreate : Verify snapshot"]
+				style task_2a1be8de stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"16 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_2a1be8de
+				linkStyle 31 stroke:#01cb42,color:#01cb42
+				task_8052cf25[" snapcreate : set_fact"]
+				style task_8052cf25 stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"17 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_8052cf25
+				linkStyle 32 stroke:#01cb42,color:#01cb42
+				task_f2fb8ebc[" snapcreate : debug"]
+				style task_f2fb8ebc stroke:#01cb42,fill:#ffffff
+				role_22727695 --> |"18 [when: ( ansible_distribution == 'Ubuntu' ) or ( ansible_distribution == 'Debian' ) or ( ansible_distribution == 'CentOS' ) or ( ansible_distribution == 'Amazon' ) or ( ansible_distribution == 'RedHat' ) and (inventory_hostname != 'localhost')]"| task_f2fb8ebc
+				linkStyle 33 stroke:#01cb42,color:#01cb42
+			%% End of the role 'snapcreate'
+		%% End of the play 'Play: all (0)'
+		%% Start of the play 'Play: all (0)'
+		play_d367ab37["Play: all (0)"]
+		style play_d367ab37 fill:#170bc1,color:#ffffff
+		playbook_45d6aaf8 --> |"3"| play_d367ab37
+		linkStyle 34 stroke:#170bc1,color:#170bc1
+			%% Start of the role 'logoff'
+			play_d367ab37 --> |"1"| role_5f9aaff0
+			linkStyle 35 stroke:#170bc1,color:#170bc1
+			role_5f9aaff0("[role] logoff")
+			style role_5f9aaff0 fill:#170bc1,color:#ffffff,stroke:#170bc1
+				task_0aaaf08f[" logoff : Remove SSH keypair"]
+				style task_0aaaf08f stroke:#170bc1,fill:#ffffff
+				role_5f9aaff0 --> |"1 [when: ( 'localhost' in inventory_hostname )]"| task_0aaaf08f
+				linkStyle 36 stroke:#170bc1,color:#170bc1
+				task_0af4dd9e[" logoff : Remove SC json"]
+				style task_0af4dd9e stroke:#170bc1,fill:#ffffff
+				role_5f9aaff0 --> |"2 [when: ( 'localhost' in inventory_hostname )]"| task_0af4dd9e
+				linkStyle 37 stroke:#170bc1,color:#170bc1
+			%% End of the role 'logoff'
+		%% End of the play 'Play: all (0)'
+	%% End of the playbook 'snapsonly.yaml'
+

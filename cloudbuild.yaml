@@ -23,29 +23,30 @@ steps:
     args:
       - '-c'
       - |
-        # gcloud auth activate-service-account --key-file=mofo-proj-23f380b7fd38.json
-        apt-get update && apt-get install -y ansible
-        gcloud source repos clone ansible --project=mofo-proj
+        apt-get update && apt-get install -y ansible && apt-get install -y python3.8
+        gcloud source repos clone ansible --project=test-ground-403314
         cd ansible
-        ssh-keygen -t rsa -q -f oslogin -N ""
-        cat oslogin
-        # mkdir ~/.ssh
-        # cp oslogin ~/.ssh/oslogin
-        # cp oslogin.pub ~/.ssh/oslogin.pub
-        chmod 600 oslogin
-        # gcloud iam service-accounts keys upload oslogin.pub --iam-account 41394223354@cloudbuild.gserviceaccount.com
-        # gcloud auth list
-        # gcloud compute os-login ssh-keys add --key-file oslogin.pub --ttl=1y
-        gcloud compute project-info add-metadata --metadata-from-file oslogin=oslogin.pub
-        # gcloud config set auth/impersonate_service_account 41394223354@cloudbuild.gserviceaccount.com
-        # gcloud auth application-default login --impersonate-service-account 41394223354@cloudbuild.gserviceaccount.com --quiet
-        ansible-playbook main.yaml --private-key oslogin -i hosts
-      # gcloud compute os-config os-policy-assignments create ubuntu-policy --location=us-east1-b --file=policies/ubuntu-policy.yaml --async
-      # gcloud compute os-config os-policy-assignments create centos-policy --location=us-east1-b --file=policies/centos-policy.yaml --async
-      # gcloud compute os-config os-policy-assignments create windows-policy --location=us-east1-b --file=policies/windows-policy.yaml --async
-      # gcloud compute project-info describe --format "value(commonInstanceMetadata[items][ssh-keys])"
-      # gcloud auth activate-service-account computeengine@mofo-proj.iam.gserviceaccount.com --key-file=mofo-proj-23f380b7fd38.json
-        # issue is logged in as compute account unable to authenticate using key to ssh, login as myself and it works
+        gcloud secrets versions access latest --project=test-ground-403314 --secret=sshcred > oslogin
+        gcloud secrets versions access latest --project=test-ground-403314 --secret=gitmanjson > sc.json
+        chmod 400 oslogin
+        chmod 400 sc.json
+        gcloud auth activate-service-account gitman@test-ground-403314.iam.gserviceaccount.com --key-file=sc.json
+        update-ca-certificates --fresh
+        export SSL_CERT_DIR=/etc/ssl/certs
+        chmod og-rw /builder/home/.netrc
+        apt-get --assume-yes install python3-pip
+        pip install google-auth
+        ansible-galaxy collection install google.cloud
+        ansible-inventory --list -i ansible.gcp.yml > allinv.json
+        python3 inv.py
+        tr < inventory.csv -d '\000' > inventory2.csv
+        tr < disks.csv -d '\000' > disks2.csv
+        bq load --source_format=CSV --autodetect --replace inventory.inventory inventory2.csv
+        bq load --source_format=CSV --autodetect --replace inventory.disks disks2.csv
+
+  ### ansible-playbook runupdates.yaml -i hosts --private-key=oslogin -l preprodgroup1:devbox
+        
+      
 
   #- name: 'gcr.io/cloud-builders/gcloud'
   #  entrypoint: 'bash'

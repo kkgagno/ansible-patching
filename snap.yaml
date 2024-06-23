@@ -1,0 +1,11 @@
+---
+  - hosts: all
+    become: yes
+    #vars_files: 
+    #  - vars.yaml
+    roles:    
+      - { role: snapcreate, when: ( ansible_distribution == "Ubuntu" ) or
+                                  ( ansible_distribution == "Debian" ) or
+                                  ( ansible_distribution == "CentOS" ) or
+                                  ( ansible_distribution == "Amazon" ) or
+                                  ( ansible_distribution == "RedHat" ) }
