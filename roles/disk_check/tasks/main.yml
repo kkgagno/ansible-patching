@@ -1,0 +1,7 @@
+---
+- name: show DiskSpace Info 
+  shell: "df -m --total"
+  register: shell_result
+- debug:
+    msg: 
+      - "{{ shell_result.stdout }}"

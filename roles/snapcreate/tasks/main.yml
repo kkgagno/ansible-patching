@@ -1,0 +1,185 @@
+---
+##where this is ran from, machine service account needs to have proper perms for viewing zones and disks of instances in the various projects
+##or authenticate a service account json
+
+- name: Import vars
+  run_once: yes
+  include_vars:
+    file: vars.yml
+    name: vardata
+
+
+- name: Get project name 
+  shell: "gcloud config get-value project 2> /dev/null"
+  register: project_result
+- debug:
+    msg: 
+      - "{{ project_result.stdout }}"
+- set_fact:     
+      project="{{ project_result.stdout }}"
+
+#- name: Get host name 
+#  shell: "hostname"
+#  register: host_result
+#- set_fact:     
+#      host="{{ host_result.stdout }}"
+#- debug:
+#    msg: 
+#     - "{{ host_result.stdout }}"
+  
+#compute service account being used needs this ability to list zones in other projects
+- name: activate sc
+  delegate_to: localhost
+  run_once: yes
+  shell: "gcloud auth activate-service-account {{ vardata.svcacct }} --key-file=sc.json"
+#  register: activate_result
+#- set_fact:     
+#      zone="{{ zone_result.stdout }}"  
+#- debug:
+#    msg: 
+#     - "{{ activate_result.stdout }}"
+
+
+
+#compute service account being used needs this ability to list zones in other projects
+- name: Get zone name
+  delegate_to: localhost
+  #shell: "gcloud compute instances list --project={{ project }} --filter=\"name={{ host }}\" --format \"get(zone)\" | awk -F/ '{print $NF}'"
+  shell: "gcloud compute instances list --project={{ project }} --filter=\"name={{ inventory_hostname }}\" --format='value(zone)'" 
+  register: zone_result
+  when:  (inventory_hostname != "localhost")
+- set_fact:     
+      zone="{{ zone_result.stdout }}"
+  when:  (inventory_hostname != "localhost")  
+- debug:
+    msg: 
+     - "{{ zone_result.stdout }}"
+  when:  (inventory_hostname != "localhost")
+
+
+- name: Get disk name
+  delegate_to: localhost
+  #shell: "gcloud compute instances describe customer1 --project=customer-403819 --zone=us-central1-a --format='get(disks[0].source)'| awk -F/ '{print $NF}'"
+  #shell: "gcloud compute instances describe {{ host }} --project={{ project }} --zone={{ zone }} --format='get(disks[0].source)' | awk -F/ '{print $NF}'"
+  shell: "gcloud compute instances list --filter='name={{ inventory_hostname }}' --project={{ project }} --format='value(disks[0].source.basename())'"
+  register: disk_result
+  when:  (inventory_hostname != "localhost")
+- set_fact:     
+      disk="{{ disk_result.stdout }}"
+  when:  (inventory_hostname != "localhost")
+  
+- debug:
+    msg: 
+     - "{{ disk_result.stdout }}"
+  when:  (inventory_hostname != "localhost")
+  
+- name: ansible date and time
+  delegate_to: localhost
+  run_once: yes
+  set_fact:
+    currenttime: "{{ ansible_date_time.date }}"
+
+- name: create epoch var
+  delegate_to: localhost
+  run_once: yes
+  set_fact:
+    epoch: "{{ ansible_date_time.epoch }}"
+
+- name: List snapshots pre cleanup
+  delegate_to: localhost
+  when:  (inventory_hostname != "localhost")
+  shell: "gcloud compute snapshots list --project={{ project }} --filter=\"name=patchsnap-{{ disk }}\" --format='get(name)'"
+  register: snappre_result
+- set_fact:     
+      snappre="{{ snappre_result.stdout }}"
+  when:  (inventory_hostname != "localhost") 
+- debug:
+    msg: 
+     - "{{ snappre_result.stdout }}"
+  when:  (inventory_hostname != "localhost") 
+
+- name:  cleanup old snapshots
+  delegate_to: localhost  
+  when:  (inventory_hostname != "localhost")
+  shell: |
+    DATE=`date --date="10 day ago" +%Y-%m-%d`
+    N=0
+
+    for name in $(gcloud compute snapshots list --project={{ project }} --filter="name~patchsnap-{{ disk  }} AND creationTimestamp<'${DATE}'" --format='get(name)')
+    do
+        N=$((N + 1))
+        (
+            set -x
+            gcloud compute --project={{ project }} snapshots delete "${name}"            
+        )
+    done
+  register: snapdelete_result
+  #gcloud compute snapshots list --project={{ project }} --filter="name~patchsnap* AND creationTimestamp<'${DATE}'" --format='get(name)' 
+  #done
+  #echo "Deleted ${N} snapshots.\n"
+#- debug:  
+#    msg:
+#      - "{{ snapdelete_result.stdout }}"
+#  when:  (inventory_hostname != "localhost")
+
+
+- name: List snapshots post cleanup-should be none older than 10 days
+  delegate_to: localhost
+  when:  (inventory_hostname != "localhost")
+  shell: "gcloud compute snapshots list --project={{ project }} --filter=\"name=patchsnap-{{ disk }}\" --format='get(name)'"
+  register: snaplist_result
+- set_fact:     
+      snaplist="{{ snaplist_result.stdout }}"
+  when:  (inventory_hostname != "localhost") 
+- debug:
+    msg: 
+     - "{{ snaplist_result.stdout }}"
+  when:  (inventory_hostname != "localhost") 
+
+
+- name: Create snapshot
+  delegate_to: localhost
+  when:  (inventory_hostname != "localhost")
+  shell: "gcloud compute snapshots create patchsnap-{{ disk }}-{{ currenttime }}{{ epoch }} --project={{ project }} --source-disk {{ disk }}  --source-disk-zone {{ zone }}"
+  register: snap_result
+- set_fact:     
+      snap="{{ snap_result.stdout }}" 
+  when:  (inventory_hostname != "localhost") 
+#- debug:
+#    msg: 
+#     - "{{ snap_result.stdout }}"
+  
+
+
+- name: Verify snapshot
+  delegate_to: localhost
+  when:  (inventory_hostname != "localhost")
+  shell: "gcloud compute snapshots describe patchsnap-{{ disk  }}-{{ currenttime }}{{ epoch }} --project={{ project }} |grep patchsnap-{{ disk  }}-{{ currenttime }}{{ epoch }}"
+  register: snapv_result
+- set_fact:     
+      snapv="{{ snapv_result.stdout }}"
+  when:  (inventory_hostname != "localhost") 
+- debug:
+    msg: 
+     - "{{ snapv_result.stdout }}"
+  when:  (inventory_hostname != "localhost")
+  
+#This option below uses compute service account of project working from
+#- name: Create snapshots of specific disks
+#  community.google.gce_snapshot:
+#    instance_name: "{{ ansible_hostname }}"
+#    snapshot_name: "{{ disk  }}{{ currenttime }}{{ epoch }}"
+#    state: present
+#    disks:
+#      - "{{ disk }}"
+#    service_account_email: gitman@test-ground-403314.iam.gserviceaccount.com
+#    credentials_file: sc.json
+#    project_id: "{{ project }}"
+#  delegate_to: localhost
+#  when:  (inventory_hostname != "localhost")
+#  register: snap
+#- debug:
+#      msg: "Snapshot {{ snap }}"
+
+  
+  

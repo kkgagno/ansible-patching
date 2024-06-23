@@ -10,9 +10,9 @@
   become: yes
   shell: "unattended-upgrade -d"
   register: upgrade_result
-- debug:
-    msg:
-      - "{{ upgrade_result }}"
+#- debug:
+#    msg:
+#      - "{{ upgrade_result }}"
   
     
 

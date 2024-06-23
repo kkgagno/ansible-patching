@@ -1,0 +1,9 @@
+- name: Check if reboot is required.
+  command: needs-restarting -r
+  failed_when: false
+  register: reboot_required
+  changed_when: false
+
+- debug:
+    msg: "Reboot is required!!!"
+  when: reboot_required.rc != 0

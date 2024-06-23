@@ -1,14 +1,38 @@
 ---
+- name: show PRE OS version 
+  shell: "uname -a"
+  register: shell_result
+- debug:
+    msg: 
+      - "{{ shell_result.stdout }}"
+
+
 - name: Ensure yum-utils is installed
   yum:
     update_cache: yes
     state: present
     name: "yum-utils"
 
-- name: Run "yum update"
-  yum:
-    update_cache: yes
-    name: "*"
+    #- name: Run "yum update --security"
+    #  yum:
+    #    security: yes
+    #    state: latest
+    #  check_mode: yes
+    #  register: yum_output
+    #  become: true
+    
+- name: Install updates
+  shell:
+    cmd: yum -y update --security
+    warn: false
+  register: result
+  changed_when: false
+  failed_when: result.rc != 0
+
+- name: Show result
+  debug:
+    msg: "{{ result.stdout }}"
+
 
 - name: Check if reboot is required.
   command: needs-restarting -r
@@ -24,3 +48,10 @@
   include_role:
     name: reboot_host
   when: reboot_required.rc != 0 and reboot_ok
+
+- name: show POST OS version
+  shell: "uname -a"
+  register: shell_result
+- debug:
+    msg:
+      - "{{ shell_result.stdout }}"

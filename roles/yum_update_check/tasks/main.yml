@@ -1,0 +1,24 @@
+#- name: List Available Patches
+#  yum:
+#    list: updates
+#    security: yes
+#    bugfix: no
+#    update_cache: true
+#    exclude: kernel*
+#  register: yumoutput
+
+#- debug: 
+#   msg:
+#      - "{{ inventory_hostname }} {{ yumoutput.results }}"
+#
+- name: Gather available security updates
+  shell:
+    cmd: yum updateinfo list security
+    warn: false
+  register: result
+  changed_when: false
+  failed_when: result.rc != 0
+
+- name: Show result
+  debug:
+    msg: "{{ result.stdout }}"
